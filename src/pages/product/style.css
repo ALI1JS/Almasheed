@@ -1,0 +1,36 @@
+.head{
+    @apply text-center  font-bold text-2xl  p-4 shadow-md  
+}
+.table {
+    @apply w-full border shadow-md
+}
+.cont{
+    @apply p-3 md:p-12
+    
+}
+
+.trhead{
+    @apply bg-[#b2b2b350] p-2
+}
+.thead{
+    @apply  font-bold p-2
+}
+tr:nth-child(even) {
+    background-color: #b2b2b350;
+   
+  }
+
+  .tbo{
+    @apply text-sky-700 p-2
+  }
+
+  .del{
+    @apply text-red-600
+  }
+  .sh{
+    @apply text-green-600
+  }
+
+  .li{
+    @apply text-center my-4 text-lg font-bold border w-fit mx-auto py-1 px-8 bg-[teal] text-white rounded-md
+  }
