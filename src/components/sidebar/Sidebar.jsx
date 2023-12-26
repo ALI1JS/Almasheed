@@ -56,7 +56,7 @@ const Sidebar = () => {
           </li> */}
 
           <p className="title">Admin</p>
-          <li>
+          {/* <li>
             <ExitToAppIcon className="icon" />
             <span
               onClick={() => {
@@ -65,7 +65,7 @@ const Sidebar = () => {
             >
               Logout
             </span>
-          </li>
+          </li> */}
         </ul>
       </div>
       <div className="bottom">
