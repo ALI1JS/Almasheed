@@ -6,9 +6,124 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
+/**************************************************************** */
+import React, { useEffect, useState } from "react";
+import { collection, getDocs, doc, deleteDoc } from "firebase/firestore";
+import { db } from "../../firebase";
+import Loading from "../../components/loading/Loading";
+import { Link } from "react-router-dom";
+
 
 const List = () => {
-  const rows = [
+
+  
+  const [load, setLoad] = useState(false);
+  const [refresh, setRefresh] = useState(false);
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    setLoad(true);
+    let list = [];
+    const fetchData = async () => {
+      const querySnapshot = await getDocs(collection(db, "best_sales"));
+      querySnapshot.forEach((doc) => {
+        list.push(doc.data());
+        console.log(list);
+        //console.log(doc.id, " => ", doc.data());  {id: doc.id, ...doc.data()}
+        
+      });
+
+
+      setData(list);
+      setLoad(false);
+    };
+
+    fetchData();
+  }, [refresh]);
+
+  
+
+
+
+  const show = data.map((e, index) => {
+    return (
+      <tr key={index}>{e.id}
+      </tr>
+    );
+  });
+
+  return (
+    
+    <div className="cont">
+      {data.length}
+        <table className="table">
+          <thead>
+            <tr className="trhead">
+              <th className=" thead">Image</th>
+              <th className=" thead">Name</th>
+              <th className=" thead">Merchant Name</th>
+              <th className=" thead">Description</th>
+              <th className=" thead">City</th>
+              <th className=" thead">Price</th>
+              <th className=" thead">view</th>
+              <th className=" thead">Delete</th>
+            </tr>
+          </thead>
+          <tbody>{show}</tbody>
+        </table>
+      </div>
+  );
+};
+
+export default List;
+
+
+
+
+/*
+<TableContainer component={Paper}  className="table">
+      <Table sx={{ minWidth: 650 }} aria-label="simple table">
+        
+        <TableHead>
+          <TableRow>
+            <TableCell className="tableCell">Tracking ID</TableCell>
+            <TableCell className="tableCell">Product</TableCell>
+            <TableCell className="tableCell">Customer</TableCell>
+            <TableCell className="tableCell">Date</TableCell>
+            <TableCell className="tableCell">Amount</TableCell>
+            <TableCell className="tableCell">Payment Method</TableCell>
+            <TableCell className="tableCell">Status</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {rows.map((row) => (
+            <TableRow key={row.id}>
+              <TableCell className="tableCell">{row.id}</TableCell>
+              <TableCell className="tableCell">
+                <div className="cellWrapper">
+                  <img src={row.img} alt="" className="image" />
+                  {row.product}
+                </div>
+              </TableCell>
+              <TableCell className="tableCell">{row.customer}</TableCell>
+              <TableCell className="tableCell">{row.date}</TableCell>
+              <TableCell className="tableCell">{row.amount}</TableCell>
+              <TableCell className="tableCell">{row.method}</TableCell>
+              <TableCell className="tableCell">
+                <span className={`status ${row.status}`}>{row.status}</span>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+
+      </Table>
+    </TableContainer>
+*/
+
+
+
+/*
+const rows = [
     {
       id: 1143155,
       product: "Acer Nitro 5",
@@ -59,44 +174,4 @@ const List = () => {
       method: "Online",
       status: "Pending",
     },
-  ];
-  return (
-    <TableContainer component={Paper} className="table">
-      <Table sx={{ minWidth: 650 }} aria-label="simple table">
-        <TableHead>
-          <TableRow>
-            <TableCell className="tableCell">Tracking ID</TableCell>
-            <TableCell className="tableCell">Product</TableCell>
-            <TableCell className="tableCell">Customer</TableCell>
-            <TableCell className="tableCell">Date</TableCell>
-            <TableCell className="tableCell">Amount</TableCell>
-            <TableCell className="tableCell">Payment Method</TableCell>
-            <TableCell className="tableCell">Status</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rows.map((row) => (
-            <TableRow key={row.id}>
-              <TableCell className="tableCell">{row.id}</TableCell>
-              <TableCell className="tableCell">
-                <div className="cellWrapper">
-                  <img src={row.img} alt="" className="image" />
-                  {row.product}
-                </div>
-              </TableCell>
-              <TableCell className="tableCell">{row.customer}</TableCell>
-              <TableCell className="tableCell">{row.date}</TableCell>
-              <TableCell className="tableCell">{row.amount}</TableCell>
-              <TableCell className="tableCell">{row.method}</TableCell>
-              <TableCell className="tableCell">
-                <span className={`status ${row.status}`}>{row.status}</span>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
-  );
-};
-
-export default List;
+  ];*/
