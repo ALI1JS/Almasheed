@@ -48,7 +48,6 @@ const Widget = ({ type }) => {
       const querySnapshot = await getDocs(collection(db, "merchants"));
       querySnapshot.forEach((doc) => {
         listM.push({ id: doc.id, ...doc.data() });
-        // console.log(doc.id, " => ", doc.data());
       });
 
       setMerch(listM);
