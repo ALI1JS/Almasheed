@@ -58,7 +58,6 @@ export const FetchOrders = async () => {
       startWeek =  `0${diff}`;
 
    startWeek = today - 7;
-    console.log(startWeek)
     let totalPrice = 0;
     ordersData.forEach((order)=>{
         
@@ -88,7 +87,10 @@ export const calculateLastMonthRevenue = async (ordersData)=>{
         
      const orderMonth = order.date.split(' ')[0].split('-')[1];
         if (Number(orderMonth) === prevMonth )
-           totalPrice += order.totalPrice;
+        {
+             console.log(orderMonth);
+             totalPrice += order.totalPrice;
+        }
     })
 
     return totalPrice;

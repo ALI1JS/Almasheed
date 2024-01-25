@@ -7,6 +7,7 @@ import KeyboardArrowUpOutlinedIcon from "@mui/icons-material/KeyboardArrowUpOutl
 import { useEffect, useState } from "react";
 import { calculateLastMonthRevenue, calculateLastWeekRevenue, calculateTodayRevenue, calculateTotalRevenue, FetchOrders } from "../../helper/revenue.calc";
 import { DateBicker } from "./date-picker.comp";
+import toast, { Toaster } from "react-hot-toast";
 
 const Featured = () => {
 
@@ -20,9 +21,9 @@ const Featured = () => {
   const [todayTarget, setTodayTarget] = useState(1000);
 
 
-  const handleTarget = (e)=>{
-     setTodayTarget(e.target.value);
-     localStorage.setItem('target-value', e.target.value)
+  const handleTarget = (e) => {
+    setTodayTarget(e.target.value);
+    localStorage.setItem('target-value', e.target.value)
   }
 
   useEffect(() => {
@@ -33,6 +34,7 @@ const Featured = () => {
     };
     fetchData();
     setTodayTarget(localStorage.getItem('target-value'));
+
   }, [])
 
 
@@ -40,8 +42,14 @@ const Featured = () => {
 
     const totalRevenueCalc = async () => {
 
-      const totalRevenue = await calculateTotalRevenue(ordersData, startDate, endDate);
-      setTotalRevenue(totalRevenue);
+      if (startDate > endDate)
+        toast.error("End Date Less Than Start Date , Must Be Greater or Equel")
+
+      else {
+        const totalRevenue = await calculateTotalRevenue(ordersData, startDate, endDate);
+        setTotalRevenue(totalRevenue);
+      }
+
     }
     totalRevenueCalc();
   }, [startDate, endDate, ordersData])
@@ -83,6 +91,7 @@ const Featured = () => {
             <h2 className="font-bold">Calculate your Revenue:</h2>
             <span className="font-bold text-2xl"> ${totalRevenue}</span>
           </div>
+
           <div className="w-full flex justify-between p-4">
 
             <DateBicker lableNmae="Start Date" setDate={(e) => { setStartDate(e.target.value) }} />

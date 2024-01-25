@@ -20,7 +20,10 @@ import ProducElementList from "./pages/list ProductElement/ProducElementList";
 import MerchentElementList from "./pages/list merchentElement/List";
 import ListCustomers from "./pages/list customers/ListCustomers";
 import ListCustomer from "./pages/list customer/ListCustomer";
+import { Toaster } from "react-hot-toast";
+
 function App() {
+  const displayError = true;
   const { darkMode } = useContext(DarkModeContext);
 
   const { currentUser } = useContext(AuthContext);
@@ -153,6 +156,7 @@ function App() {
           </Route>
         </Routes>
       </BrowserRouter>
+      <Toaster position="top-center"/>
     </div>
   );
 }

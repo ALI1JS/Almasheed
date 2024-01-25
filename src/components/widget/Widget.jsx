@@ -9,12 +9,12 @@ import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../firebase";
 import { Link } from "react-router-dom";
 import React, { useEffect, useState } from "react";
+import { FetchOrders, calculateTodayRevenue } from "../../helper/revenue.calc";
 
 
 
 const Widget = ({ type }) => {
   let data;
-
   //temporary
   const amount = 100;
   const diff = 20;
@@ -27,6 +27,8 @@ const Widget = ({ type }) => {
   const [info, setInfo] = useState([]);/**custumer */
   const [merch, setMerch] = useState([]);/**Merchent */
   const [product, setProduct] = useState([]);/**Product */
+  const [todaytotalRevenue, setTodayTotalRevenue] = useState(0);
+  const [ordersData, setOrdersData] = useState([]);
   useEffect(() => {
     setLoad(true);
     let list = [];
@@ -76,6 +78,26 @@ const Widget = ({ type }) => {
 
     fetchData();
   }, []);
+
+
+  useEffect(() => {
+    const fetchData = async () => {
+      FetchOrders().then((orders) => {
+        setOrdersData(orders);
+      })
+    };
+    fetchData();
+  }, [])
+
+  useEffect(() => {
+
+    const calc = async () => {
+      const todayRevenue = await calculateTodayRevenue(ordersData);
+      setTodayTotalRevenue(todayRevenue);
+    }
+
+    calc();
+  }, [ordersData]);
 
   switch (type) {
     case "user":
@@ -141,7 +163,8 @@ const Widget = ({ type }) => {
     case "balance":
       data = {
         title: "BALANCE",
-        isMoney: true,
+        isMoney:  true,
+        mount: todaytotalRevenue,
         link: "See details",
         icon: (
           <AccountBalanceWalletOutlinedIcon
@@ -163,7 +186,7 @@ const Widget = ({ type }) => {
       <div className="left">
         <span className="title">{data.title}</span>
         <span className="counter">
-          {data.isMoney && "$"} {data.count} 
+          {data.isMoney && `${data.mount} $`} {data.count} 
         </span>
         <span className="link">{data.link} </span>
       </div>
